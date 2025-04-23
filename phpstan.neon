@@ -1,5 +1,9 @@
 parameters:
-    level: 10
     paths:
         - config
         - src
+
+    scanDirectories:
+        - var
+
+    level: 10
