@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DScho\Backend;
+namespace DScho\Backend\Authentication;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -21,8 +21,8 @@
         }
     },
     "scripts":  {
-        "phpstan": "phpstan analyze",
-        "csfix": "PHP_CS_FIXER_IGNORE_ENV=true php-cs-fixer fix",
+        "phpstan": "../vendor/bin/phpstan analyze",
+        "csfix": "PHP_CS_FIXER_IGNORE_ENV=true ../vendor/bin/php-cs-fixer fix",
         "fixall": [
             "@phpstan",
             "@csfix"

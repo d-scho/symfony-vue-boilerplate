@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use DScho\Backend\JsonNoContentSuccessHandler;
+use DScho\Backend\Authentication\JsonNoContentSuccessHandler;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
 

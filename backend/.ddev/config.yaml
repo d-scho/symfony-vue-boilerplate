@@ -1,4 +1,4 @@
-name: symfony-vue-boilerplate
+name: symfony-vue-boilerplate-backend
 type: php
 docroot: public
 php_version: "8.4"
@@ -9,11 +9,11 @@ additional_fqdns: []
 database:
     type: mariadb
     version: "10.11"
+omit_containers: [db]
 use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
 corepack_enable: false
-nodejs_version: 22
 
 # Key features of DDEV's config.yaml:
 
