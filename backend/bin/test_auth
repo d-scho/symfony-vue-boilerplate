@@ -1,6 +1,0 @@
-#!/usr/bin/bash
-
-curl -X POST https://symfony-vue-boilerplate.ddev.site/login \
--H "Content-Type: application/json" \
--d '{"username": "admin", "password": "admin-pw"}' \
--i

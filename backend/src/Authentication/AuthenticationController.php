@@ -2,22 +2,26 @@
 
 declare(strict_types=1);
 
-namespace DScho\Backend\Authentication;
+namespace Api\Authentication;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 final readonly class AuthenticationController
 {
-    /**
-     * Used to request a CSRF token for login.
-     *
-     * Login POST is handled by 'main' firewall, see `config/packages/security.php`.
-     * Authentication success is handled by {@see JsonNoContentSuccessHandler}.
-     */
-    #[Route(name: 'app_csrf_token', path: '/login', methods: 'GET')]
-    public function index(): Response
+    public function __construct(
+        private CsrfTokenManagerInterface $csrfTokenManager,
+    ) {
+    }
+
+    #[Route(path: '/login', name: 'app_csrf_token', methods: 'GET')]
+    public function csrfToken(): JsonResponse
     {
-        return new Response('foo');
+        $token = $this->csrfTokenManager->getToken('authenticate')->getValue();
+
+        return new JsonResponse([
+            'csrfToken' => $token,
+        ]);
     }
 }

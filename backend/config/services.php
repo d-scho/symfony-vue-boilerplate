@@ -9,8 +9,9 @@ return static function (ContainerConfigurator $container) {
 
     $services
         ->defaults()
+        ->load('Api\\', '../src/')
         ->autowire()
         ->autoconfigure()
-        ->load('DScho\\Backend\\', '../src/')
+        ->public()
     ;
 };
