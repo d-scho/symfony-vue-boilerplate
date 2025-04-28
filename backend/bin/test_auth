@@ -1,0 +1,23 @@
+#!/usr/bin/bash
+
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  https://symfony-vue-boilerplate-backend.ddev.site/api/login \
+  -d '{"username":"johndoe","password":"test"}'
+
+echo ''
+
+TOKEN=$(curl \
+  -s \
+  -X POST \
+  -H "Content-Type: application/json" \
+  https://symfony-vue-boilerplate-backend.ddev.site/api/login \
+  -d '{"username":"admin","password":"admin-pw"}' \
+  | jq -r '.token')
+
+curl \
+  -H "Authorization: Bearer $TOKEN" \
+  https://symfony-vue-boilerplate-backend.ddev.site/
+
+echo ''
