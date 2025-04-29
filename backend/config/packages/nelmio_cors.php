@@ -7,11 +7,11 @@ use Symfony\Config\NelmioCorsConfig;
 // Attention: CORS only protects against reading responses, it doesn't block requests
 return static function (NelmioCorsConfig $cors) {
     $cors
-        ->paths('^/')
-        ->allowOrigin(['localhost'])
+        ->paths('/api/login')
+        ->allowOrigin(['http://localhost:5173'])
         ->allowMethods(['GET', 'POST'])
-        ->allowHeaders(['X-CSRF-Token']) // returned from preflight request -> says which headers are allowed on actual request
+        ->allowHeaders(['Content-Type', 'Authorization']) // returned from preflight request -> says which headers are allowed on actual request
         ->maxAge(3600) // validity duration of preflight response
-//        ->allowCredentials(true)
+        ->allowCredentials(false)
     ;
 };
