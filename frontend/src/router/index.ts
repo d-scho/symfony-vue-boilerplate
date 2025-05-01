@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import LoginView from "../views/LoginView.vue";
 import { useAuthenticationStore } from "@/stores/authentication.ts";
 
 const router = createRouter({
@@ -7,20 +6,31 @@ const router = createRouter({
   routes: [
     {
       path: "/login",
-      name: "login",
-      component: LoginView,
+      name: "LoginView",
+      component: () => import("../views/LoginView.vue"),
     },
     {
-      path: "/",
-      name: "home",
-      component: () => import("../views/HomeView.vue"),
-      meta: { requiresAuth: true, roles: ["ROLE_ADMIN"] },
+      path: "/unauthorized",
+      name: "UnauthorizedView",
+      component: () => import("../views/UnauthorizedView.vue"),
+      meta: { requiresAuthentication: true },
     },
     {
-      path: "/foo",
-      name: "foo",
-      component: () => import("../views/HomeView.vue"),
-      meta: { requiresAuth: true, roles: ["ROLE_SUPER_ADMIN"] },
+      path: "/user",
+      name: "UserView",
+      component: () => import("../views/UserView.vue"),
+      meta: { requiresAuthentication: true, roles: ["ROLE_USER"] },
+    },
+    {
+      path: "/admin",
+      name: "AdminView",
+      component: () => import("../views/AdminView.vue"),
+      meta: { requiresAuthentication: true, roles: ["ROLE_ADMIN"] },
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "NotFound",
+      component: () => import("../views/NotFoundView.vue"),
     },
   ],
 });
@@ -28,13 +38,22 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const { user } = useAuthenticationStore();
 
-  if (to.meta.requiresAuth) {
+  const requiresAuthentication = !!to.meta.requiresAuthentication;
+  const requiresAuthorization = to.meta.roles !== undefined;
+
+  console.log(requiresAuthentication);
+  console.log(requiresAuthorization);
+
+  if (requiresAuthentication) {
     if (user === null) {
-      return next("/login?noAuth");
+      return next("/login");
     }
 
-    if (user.roles.length === 0 || user.roles.every((role) => !to.meta.roles.includes(role))) {
-      return next("/login?noRoles"); // TODO: What to do?
+    if (
+      requiresAuthorization &&
+      (user.roles.length === 0 || user.roles.every((role) => !to.meta.roles?.includes(role)))
+    ) {
+      return next({ path: "/unauthorized", query: { t: to.path } });
     }
   }
 

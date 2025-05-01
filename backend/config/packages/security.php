@@ -20,6 +20,7 @@ return static function (SecurityConfig $security) {
         ->password('admin-pw')
         ->roles([
             'ROLE_ADMIN',
+            'ROLE_USER',
         ]);
     $memoryProvider
         ->user('user')
@@ -60,17 +61,17 @@ return static function (SecurityConfig $security) {
     // access control is just a broader way of covering access rules - AUTHORIZATION
     // i.e., it does not directly relate the firewall
     // e.g., if ->security(false) was not set on the 'dev' firewall, this would also cover it
-    $security->accessControl()
-        ->path('^/api/login$')
-        ->roles(['PUBLIC_ACCESS']);
-
-    $security->accessControl()
-        ->path('^/api/admin')
-        ->roles(['ROLE_ADMIN']);
-
-    $security->accessControl()
-        ->roles([
-            'ROLE_ADMIN',
-            'ROLE_USER'
-        ]);
+//    $security->accessControl()
+//        ->path('^/api/login$')
+//        ->roles(['PUBLIC_ACCESS']);
+//
+//    $security->accessControl()
+//        ->path('^/api/admin')
+//        ->roles(['ROLE_ADMIN']);
+//
+//    $security->accessControl()
+//        ->roles([
+//            'ROLE_ADMIN',
+//            'ROLE_USER'
+//        ]);
 };

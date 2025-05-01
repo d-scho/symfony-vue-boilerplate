@@ -33,8 +33,8 @@ async function submit(event: PointerEvent) {
     abort = true;
   }
 
-  if (password.value.length < 8) {
-    passwordError.value = "Please enter at least two characters.";
+  if (password.value.length < 6) {
+    passwordError.value = "Please enter at least 6 characters.";
     abort = true;
   }
 
