@@ -2,37 +2,21 @@
 
 declare(strict_types=1);
 
-use Api\User\Provider\CustomUserProvider;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
+use SymfonyVueBoilerplateBackend\Authentication\Provider\CustomUserProvider;
 
 return static function (SecurityConfig $security) {
     $security
         ->passwordHasher(PasswordAuthenticatedUserInterface::class, [
-            'algorithm' => 'plaintext',
-        ]);
-
-    // provider definition
-    $memoryProvider = $security
-        ->provider('app_user_provider')
-        ->memory();
-    $memoryProvider
-        ->user('admin')
-        ->password('admin-pw')
-        ->roles([
-            'ROLE_ADMIN',
-            'ROLE_USER',
-        ]);
-    $memoryProvider
-        ->user('user')
-        ->password('user-pw')
-        ->roles([
-            'ROLE_USER',
-        ]);
+            'algorithm' => 'auto',
+        ])
+    ;
 
     $security
         ->provider('custom_user_provider')
-        ->id(CustomUserProvider::class);
+        ->id(CustomUserProvider::class)
+    ;
 
     // firewall definitions
     // firewalls get activated based on the pattern - AUTHENTICATION
@@ -62,20 +46,13 @@ return static function (SecurityConfig $security) {
         ->stateless(true)
         ->jwt();
 
-    // access control is just a broader way of covering access rules - AUTHORIZATION
-    // i.e., it does not directly relate the firewall
-    // e.g., if ->security(false) was not set on the 'dev' firewall, this would also cover it
-//    $security->accessControl()
-//        ->path('^/api/login$')
-//        ->roles(['PUBLIC_ACCESS']);
-//
-//    $security->accessControl()
-//        ->path('^/api/admin')
-//        ->roles(['ROLE_ADMIN']);
-//
-//    $security->accessControl()
-//        ->roles([
-//            'ROLE_ADMIN',
-//            'ROLE_USER'
-//        ]);
+    //    /*
+    //     * access control is just a broader way of covering access rules - AUTHORIZATION
+    //     * i.e., it does not directly relate the firewall
+    //     * e.g., if ->security(false) was not set on the 'dev' firewall, this would also cover it
+    //     */
+    //    $security->accessControl()
+    //        ->path('...')
+    //        ->roles([...])
+    //    ;
 };

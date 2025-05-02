@@ -8,7 +8,7 @@ use Symfony\Config\NelmioCorsConfig;
 return static function (NelmioCorsConfig $cors) {
     $cors
         ->paths('/api/login')
-        ->allowOrigin(['http://localhost:5173'])
+        ->allowOrigin(['%env(FRONTEND_DOMAIN)%'])
         ->allowMethods(['GET', 'POST'])
         ->allowHeaders(['Content-Type', 'Authorization']) // returned from preflight request -> says which headers are allowed on actual request
         ->maxAge(3600) // validity duration of preflight response

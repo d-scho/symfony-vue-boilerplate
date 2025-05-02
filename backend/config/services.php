@@ -9,7 +9,7 @@ return static function (ContainerConfigurator $container) {
 
     $services
         ->defaults()
-        ->load('Api\\', '../src/')
+        ->load('SymfonyVueBoilerplateBackend\\', '../src/')
         ->exclude('../src/**/ValueObject/*')
         ->autowire()
         ->autoconfigure()

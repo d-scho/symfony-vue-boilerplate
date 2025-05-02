@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Api\\": "src"
+            "SymfonyVueBoilerplateBackend\\": "src"
         }
     },
     "autoload-dev": {

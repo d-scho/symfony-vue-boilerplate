@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
-use Api\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use SymfonyVueBoilerplateBackend\Kernel;
 
 if (!is_dir(dirname(__DIR__) . '/vendor')) {
     throw new LogicException('Dependencies are missing. Try running "composer install".');

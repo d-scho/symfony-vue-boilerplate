@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Api\Controller;
+namespace SymfonyVueBoilerplateBackend\API\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ApiController extends AbstractController
 {
     #[Route(path: '/user', name: 'user_resource', methods: 'GET')]
-//    #[IsGranted('ROLE_USER')]
+    //    #[IsGranted('ROLE_USER')]
     public function user(): JsonResponse
     {
         return $this->json(['userdata' => true]);
