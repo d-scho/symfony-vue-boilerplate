@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Api\User\Provider\CustomUserProvider;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
 
@@ -29,6 +30,9 @@ return static function (SecurityConfig $security) {
             'ROLE_USER',
         ]);
 
+    $security
+        ->provider('custom_user_provider')
+        ->id(CustomUserProvider::class);
 
     // firewall definitions
     // firewalls get activated based on the pattern - AUTHENTICATION
@@ -42,7 +46,7 @@ return static function (SecurityConfig $security) {
     $security
         ->firewall('login')
         ->pattern('^/api/login$')
-        ->provider('app_user_provider')
+        ->provider('custom_user_provider')
         ->stateless(true)
         ->jsonLogin()
             ->checkPath('/api/login') // lexik JWT bundle covers that route
@@ -54,7 +58,7 @@ return static function (SecurityConfig $security) {
     // then 'api' for all other routes - pattern can be left out if "all"
     $security
         ->firewall('api')
-        ->provider('app_user_provider')
+        ->provider('custom_user_provider')
         ->stateless(true)
         ->jwt();
 

@@ -1,5 +1,10 @@
-import { createRouter, createWebHistory } from "vue-router";
-import { useAuthenticationStore } from "@/stores/authentication.ts";
+import { createRouter, createWebHistory, type RouteMeta } from "vue-router";
+import { useAuthenticationStore, type Roles } from "@/stores/authentication.ts";
+
+type ExtendedRouteMeta = RouteMeta & {
+  requiresAuthentication: true|undefined;
+  roles: Roles|undefined;
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,20 +43,19 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const { user } = useAuthenticationStore();
 
-  const requiresAuthentication = !!to.meta.requiresAuthentication;
-  const requiresAuthorization = to.meta.roles !== undefined;
+  const targetRouteMeta = to.meta as ExtendedRouteMeta;
 
-  console.log(requiresAuthentication);
-  console.log(requiresAuthorization);
+  const requiresAuthentication = !!targetRouteMeta.requiresAuthentication;
+  const requiresAuthorization = (targetRouteMeta.roles?.length ?? 0) > 0;
 
   if (requiresAuthentication) {
     if (user === null) {
-      return next("/login");
+      return next({ path: "/login", query: { t: to.path } });
     }
 
     if (
       requiresAuthorization &&
-      (user.roles.length === 0 || user.roles.every((role) => !to.meta.roles?.includes(role)))
+      (user.roles.length === 0 || user.roles.every((role) => !targetRouteMeta.roles!.includes(role)))
     ) {
       return next({ path: "/unauthorized", query: { t: to.path } });
     }

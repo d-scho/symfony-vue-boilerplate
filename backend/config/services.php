@@ -10,6 +10,7 @@ return static function (ContainerConfigurator $container) {
     $services
         ->defaults()
         ->load('Api\\', '../src/')
+        ->exclude('../src/**/ValueObject/*')
         ->autowire()
         ->autoconfigure()
         ->public()

@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useAuthenticationStore } from "@/stores/authentication.ts";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+
+const { login } = useAuthenticationStore();
+
+const router = useRouter();
+
+const route = useRoute();
+const target = route.query.t;
 
 const username = ref("admin");
 const password = ref("admin-pw");
@@ -13,11 +20,7 @@ const loginError = ref("");
 
 const isLoading = ref(false);
 
-const { login } = useAuthenticationStore();
-
-const router = useRouter();
-
-async function submit(event: PointerEvent) {
+async function submit(event: Event) {
   event.preventDefault();
 
   isLoading.value = true;
@@ -44,10 +47,8 @@ async function submit(event: PointerEvent) {
   }
 
   login(username.value, password.value)
-    .then((roles) => {
-      console.log(roles);
-
-      router.push("/");
+    .then(() => {
+      router.push(typeof target === "string" ? target : "/");
     })
     .catch((error: Error) => {
       loginError.value = error.message;
