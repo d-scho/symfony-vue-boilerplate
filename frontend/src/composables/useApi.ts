@@ -19,6 +19,7 @@ function req<T>(
 ): Promise<T> {
   const init = {
     method,
+    headers: {},
   };
 
   if (token !== null) {

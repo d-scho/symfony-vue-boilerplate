@@ -11,6 +11,7 @@ return static function (ContainerConfigurator $container) {
         ->defaults()
         ->load('SymfonyVueBoilerplateBackend\\', '../src/')
         ->exclude([
+            '../src/**/Entity/*',
             '../src/**/ValueObject/*',
             '../src/**/ViewModel/*',
         ])

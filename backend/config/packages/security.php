@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
-use SymfonyVueBoilerplateBackend\Authentication\Provider\CustomUserProvider;
+use SymfonyVueBoilerplateBackend\Authentication\Provider\UserProvider;
 
 return static function (SecurityConfig $security) {
     $security
@@ -15,7 +15,7 @@ return static function (SecurityConfig $security) {
 
     $security
         ->provider('custom_user_provider')
-        ->id(CustomUserProvider::class)
+        ->id(UserProvider::class)
     ;
 
     // firewall definitions
