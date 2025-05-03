@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useAuthenticationStore } from "@/stores/authentication.ts";
+import { useAuthentication } from "@/composables/useAuthentication.ts";
 import { useRouter, useRoute } from "vue-router";
 
-const { login } = useAuthenticationStore();
+const { login } = useAuthentication();
 
 const router = useRouter();
 
@@ -50,9 +50,7 @@ async function submit(event: Event) {
     .then(() => {
       router.push(typeof target === "string" ? target : "/");
     })
-    .catch((error: Error) => {
-      loginError.value = error.message;
-    })
+    .catch(console.error)
     .finally(() => {
       isLoading.value = false;
     });

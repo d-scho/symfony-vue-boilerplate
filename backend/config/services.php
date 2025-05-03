@@ -10,7 +10,10 @@ return static function (ContainerConfigurator $container) {
     $services
         ->defaults()
         ->load('SymfonyVueBoilerplateBackend\\', '../src/')
-        ->exclude('../src/**/ValueObject/*')
+        ->exclude([
+            '../src/**/ValueObject/*',
+            '../src/**/ViewModel/*',
+        ])
         ->autowire()
         ->autoconfigure()
         ->public()

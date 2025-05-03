@@ -7,6 +7,7 @@ namespace SymfonyVueBoilerplateBackend\Authentication\Provider;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use SymfonyVueBoilerplateBackend\API\ViewModel\CustomUserViewModel;
 use SymfonyVueBoilerplateBackend\Authentication\ValueObject\CustomUser;
 
 /**
@@ -60,4 +61,16 @@ class CustomUserProvider implements UserProviderInterface
         return array_find($this->users, static fn (CustomUser $user) => $user->getUserIdentifier() === $identifier)
             ?? throw new UserNotFoundException();
     }
+
+    /**
+     * @return array<CustomUserViewModel>
+     */
+    public function getAllUsersAsViewModel(): array
+    {
+        return array_map(
+            static fn (CustomUser $user) => new CustomUserViewModel($user->username, $user->displayName),
+            $this->users,
+        );
+    }
+
 }

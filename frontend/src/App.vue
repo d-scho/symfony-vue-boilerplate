@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from "vue-router";
-import { useAuthenticationStore, type User } from "@/stores/authentication.ts";
-import { storeToRefs } from "pinia";
+import { useUser } from "@/composables/useUser.ts";
+import { useAuthentication } from "@/composables/useAuthentication.ts";
 
-const authentication = useAuthenticationStore();
-
-// for some reason, the type is lost here
-const user = storeToRefs(authentication).user as unknown as User;
+const { user } = useUser();
+const { logout: authLogout } = useAuthentication();
 
 const router = useRouter();
 
 function logout() {
-  authentication.logout();
+  authLogout();
 
   router.push("/login");
 }
