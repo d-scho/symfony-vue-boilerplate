@@ -5,7 +5,7 @@ import { useApi } from "@/composables/useApi.ts";
 const users = ref<Array<{ username: string; displayName: string }>>([]);
 
 useApi()
-  .users.getAll()
+  .users.showAll()
   .then((fetchedUsers) => (users.value = fetchedUsers))
   .catch(console.log);
 </script>

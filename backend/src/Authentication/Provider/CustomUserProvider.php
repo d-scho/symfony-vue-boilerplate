@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SymfonyVueBoilerplateBackend\Authentication\Provider;
 
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -24,6 +25,7 @@ class CustomUserProvider implements UserProviderInterface
     {
         $this->users = [
             new CustomUser(
+                Uuid::uuid4(),
                 'admin',
                 '$2y$13$WvFzNg4QGQBMjjOjQ.I9N.X5VqZLpSyUAdkHheuL4rbpoWruc/wPi', // 'admin-pw'
                 'Administrator',
@@ -33,6 +35,7 @@ class CustomUserProvider implements UserProviderInterface
                 ],
             ),
             new CustomUser(
+                Uuid::uuid4(),
                 'user',
                 '$2y$13$E7Bfwsw/0Q0LQBkl3nWJ3OMPzri2BNEht.wZ69ylN6zDrcCPFI8UO', // 'user-pw'
                 'Generic user',
@@ -68,7 +71,11 @@ class CustomUserProvider implements UserProviderInterface
     public function getAllUsersAsViewModel(): array
     {
         return array_map(
-            static fn (CustomUser $user) => new CustomUserViewModel($user->username, $user->displayName),
+            static fn (CustomUser $user) => new CustomUserViewModel(
+                $user->uuid->toString(),
+                $user->username,
+                $user->displayName,
+            ),
             $this->users,
         );
     }
