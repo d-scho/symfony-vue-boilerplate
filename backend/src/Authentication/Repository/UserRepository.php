@@ -58,4 +58,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $this->findAll(),
         );
     }
+
+    public function getAsViewModel(string $id): UserViewModel|null
+    {
+        $user = $this->find($id);
+
+        if ($user === null) {
+            return null;
+        }
+
+        return new UserViewModel(
+            $user->uuid,
+            $user->username,
+            $user->displayName,
+        );
+    }
 }
