@@ -19,6 +19,18 @@ class UserFixtures extends Fixture
     {
         $user = new User(
             Uuid::uuid4()->toString(),
+            'user',
+            '',
+            'User',
+            [
+                'ROLE_USER',
+            ],
+        );
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'user-pw'));
+        $manager->persist($user);
+
+        $user = new User(
+            Uuid::uuid4()->toString(),
             'admin',
             '',
             'Administrator',
@@ -27,10 +39,9 @@ class UserFixtures extends Fixture
                 'ROLE_USER',
             ],
         );
-
         $user->setPassword($this->passwordHasher->hashPassword($user, 'admin-pw'));
-
         $manager->persist($user);
+
         $manager->flush();
     }
 }

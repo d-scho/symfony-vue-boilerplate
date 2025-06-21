@@ -10,7 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-use SymfonyVueBoilerplateBackend\API\ViewModel\UserViewModel;
 use SymfonyVueBoilerplateBackend\Authentication\Entity\User;
 
 /**
@@ -42,35 +41,5 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
-    }
-
-    /**
-     * @return array<UserViewModel>
-     */
-    public function getAllAsViewModels(): array
-    {
-        return array_map(
-            static fn (User $user) => new UserViewModel(
-                $user->uuid,
-                $user->username,
-                $user->displayName,
-            ),
-            $this->findAll(),
-        );
-    }
-
-    public function getAsViewModel(string $id): UserViewModel|null
-    {
-        $user = $this->find($id);
-
-        if ($user === null) {
-            return null;
-        }
-
-        return new UserViewModel(
-            $user->uuid,
-            $user->username,
-            $user->displayName,
-        );
     }
 }

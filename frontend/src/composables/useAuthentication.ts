@@ -7,7 +7,12 @@ const { token, user } = useUser();
 async function login(username: string, password: string) {
   await useApi()
     .login(username, password)
-    .then((data) => {
+    .then(({ data, errors }) => {
+      if (errors !== undefined) {
+        console.log(errors);
+        return;
+      }
+
       token.value = data.token;
       user.value = jwtDecode<DecodedToken>(data.token);
 

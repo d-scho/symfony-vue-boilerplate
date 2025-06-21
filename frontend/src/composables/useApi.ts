@@ -1,60 +1,130 @@
 import { useUser } from "@/composables/useUser.ts";
 
-const { token } = useUser();
+type SymfonyApiError = {
+  // Problem Details https://datatracker.ietf.org/doc/html/rfc7807 (Symfony default)
+  type?: string;
+  title?: string;
+  detail?: string;
+  status?: number;
+  violations?: Array<{
+    propertyPath: string;
+    title: string;
+  }>
 
-type UserApiResponse = {
-  id: string;
-  username: string;
-  displayName: string;
+  // when 401 by JWT bundle
+  code?: string;
+  message?: string;
 };
+
+type Errors = {
+  genericErrors: Array<{
+    status: number;
+    message: string;
+  }>;
+  validationErrors: {
+    [key: string]: string;
+  };
+}
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 type URI = `/${string}`;
 
-function req<T>(
+async function request<T>(
   method: Method,
   uri: URI,
   token: string | null = null,
   body: object | null = null,
-): Promise<T> {
-  const init = {
+): Promise<{data?: T, errors?: Errors}> {
+  const init: RequestInit = {
     method,
-    headers: {},
+    headers: {
+      Accept: "application/problem+json, application/json",
+
+    },
   };
 
   if (token !== null) {
-    init.headers["Authorization"] = `Bearer ${token}`;
+    (init.headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
   }
 
   if (body !== null) {
     const stringified = JSON.stringify(body);
 
-    init.headers["Content-Type"] = "application/json";
-    init.headers["Content-Length"] = stringified.length;
+    (init.headers as Record<string, string>)["Content-Type"] = "application/json";
     init.body = stringified;
   }
 
-  return fetch(import.meta.env.VITE_BACKEND_DOMAIN + uri, init).then((res) => res.json() as T);
+  try {
+    const res = await fetch(import.meta.env.VITE_BACKEND_DOMAIN + uri, init);
+
+    const contentType = res.headers.get("Content-Type") || "";
+    if (!contentType.includes("application/json")) {
+      throw new Error(`Unexpected content type: ${contentType}`);
+    }
+
+    const json = await res.json();
+
+    if (res.ok) {
+      return { data: json as T };
+    }
+
+    const errorData = json as SymfonyApiError;
+
+    const errors: Errors = {
+      genericErrors: [],
+      validationErrors: {},
+    };
+
+    if (errorData.violations && Array.isArray(errorData.violations)) {
+      errorData.violations.forEach((violation) => {
+        errors.validationErrors[violation.propertyPath] = violation.title;
+      });
+    } else {
+      errors.genericErrors.push({
+        status: errorData.status ?? errorData.code ?? res.status,
+        message: getErrorMessage(errorData)
+      });
+    }
+
+    return { errors };
+
+  } catch (err: unknown) {
+    return {
+      errors: {
+        genericErrors: [
+          {
+            status: 0,
+            message:
+              err instanceof Error
+                ? err.message
+                : "Something went wrong.",
+          },
+        ],
+        validationErrors: {},
+      },
+    };
+  }
 }
 
-const api = {
-  login: (username: string, password: string) =>
-    req<{ token: string }>("POST", "/api/login", null, { username, password }),
-  users: {
-    showAll: () => req<Array<UserApiResponse>>("GET", "/api/users", token.value),
-    showSingle: (id: string) => req<UserApiResponse>("GET", `/api/users/${id}`, token.value),
-    create: (username: string, password: string, displayName: string) =>
-      req<UserApiResponse>("POST", "/api/users", token.value, { username, password, displayName }),
-    update: (id: string, username: string, password: string, displayName: string) =>
-      req<UserApiResponse>("PUT", `/api/users/${id}`, token.value, {
-        username,
-        password,
-        displayName,
-      }),
-    delete: (id: string) => req<void>("DELETE", `/api/users/${id}`),
-  },
-} as const;
+function getErrorMessage(error: SymfonyApiError): string {
+  if (error.title && error.detail) return `${error.title} - ${error.detail}`;
+  if (error.title) return error.title;
+  if (error.detail) return error.detail;
+  if (error.message) return error.message;
+  return "An unknown error occurred.";
+}
+
+const { token } = useUser();
+
+const login = (username: string, password: string) =>
+    request<{ token: string }>("POST", "/api/login", null, { username, password });
+
+const getAll = () =>
+  request<Array<{ uuid: string, title: string }>>("GET", "/api/examples", token.value, null);
 
 export function useApi() {
-  return api;
+  return {
+    login,
+    getAll
+  };
 }

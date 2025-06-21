@@ -23,7 +23,14 @@ return static function (SecurityConfig $security) {
     // here, 'dev' will be triggered on the defined pattern and will disable all security
     $security
         ->firewall('dev')
-        ->pattern('^/(_(profiler|wdt)|css|images|js)/')
+        ->pattern([
+            '^/_profiler/',
+            '^/_wdt/',
+            '/css/',
+            '/js/',
+            '^/api/doc$',
+            '^/api/schema$',
+        ])
         ->security(false);
 
     // then, 'login' is triggered for '/api/login'
@@ -51,8 +58,8 @@ return static function (SecurityConfig $security) {
     //     * i.e., it does not directly relate the firewall
     //     * e.g., if ->security(false) was not set on the 'dev' firewall, this would also cover it
     //     */
-    //    $security->accessControl()
-    //        ->path('...')
-    //        ->roles([...])
-    //    ;
+        $security->accessControl()
+            ->path('^(?!api/login$)')
+            ->roles(['ROLE_USER'])
+        ;
 };
