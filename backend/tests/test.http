@@ -1,0 +1,8 @@
+### Login user
+POST https://symfony-vue-boilerplate-backend.ddev.site/api/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "user-pw"
+}

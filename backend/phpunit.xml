@@ -2,7 +2,8 @@
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-    bootstrap="vendor/autoload_runtime.php"
+    colors="true"
+    bootstrap="tests/bootstrap.php"
     cacheDirectory=".phpunit.cache"
     executionOrder="depends,defects"
     requireCoverageMetadata="false"
@@ -11,6 +12,8 @@
     displayDetailsOnPhpunitDeprecations="true"
     failOnPhpunitDeprecation="true"
     failOnRisky="true"
+    failOnDeprecation="true"
+    failOnNotice="true"
     failOnWarning="true"
 >
     <testsuites>
@@ -24,7 +27,9 @@
         </include>
     </source>
     <php>
-        <env name="KERNEL_CLASS" value="SymfonyVueBoilerplateBackend\Kernel" />
-        <env name="APP_ENV" value="test" force="true" />
+        <ini name="display_errors" value="1" />
+        <ini name="error_reporting" value="-1" />
+        <server name="APP_ENV" value="test" force="true" />
+        <server name="SHELL_VERBOSITY" value="-1" />
     </php>
 </phpunit>

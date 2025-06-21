@@ -24,5 +24,4 @@ return [
     DoctrineFixturesBundle::class => ['all' => true],
     NelmioApiDocBundle::class => ['dev' => true],
     TwigBundle::class => ['dev' => true], // only needed for Swagger UI
-
 ];
