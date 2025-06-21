@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import {useApi} from "@/composables/useApi.js";
+import { ref } from "vue";
+import { useApi } from "@/composables/useApi.js";
 
-const fetchedData = ref(null);
-const fetchedErrors = ref(null);
+const fetchedData = ref<any>(null);
+const fetchedErrors = ref<any>(null);
 
-useApi().getAll().then(({ data, errors }) => {
-  if (data) {
-    fetchedData.value = data;
-    return
-  }
+useApi()
+  .getAll()
+  .then((res) => {
+    if ("data" in res) {
+      fetchedData.value = res.data;
+      return;
+    }
 
-  fetchedErrors.value = errors;
-});
+    fetchedErrors.value = res.errors;
+  });
 </script>
 
 <template>

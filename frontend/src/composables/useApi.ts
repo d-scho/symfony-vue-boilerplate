@@ -9,10 +9,10 @@ type SymfonyApiError = {
   violations?: Array<{
     propertyPath: string;
     title: string;
-  }>
+  }>;
 
   // when 401 by JWT bundle
-  code?: string;
+  code?: number;
   message?: string;
 };
 
@@ -24,7 +24,7 @@ type Errors = {
   validationErrors: {
     [key: string]: string;
   };
-}
+};
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 type URI = `/${string}`;
@@ -34,12 +34,11 @@ async function request<T>(
   uri: URI,
   token: string | null = null,
   body: object | null = null,
-): Promise<{data?: T, errors?: Errors}> {
+): Promise<{ data: T } | { errors: Errors }> {
   const init: RequestInit = {
     method,
     headers: {
       Accept: "application/problem+json, application/json",
-
     },
   };
 
@@ -82,22 +81,18 @@ async function request<T>(
     } else {
       errors.genericErrors.push({
         status: errorData.status ?? errorData.code ?? res.status,
-        message: getErrorMessage(errorData)
+        message: getErrorMessage(errorData),
       });
     }
 
     return { errors };
-
   } catch (err: unknown) {
     return {
       errors: {
         genericErrors: [
           {
             status: 0,
-            message:
-              err instanceof Error
-                ? err.message
-                : "Something went wrong.",
+            message: err instanceof Error ? err.message : "Something went wrong.",
           },
         ],
         validationErrors: {},
@@ -117,14 +112,14 @@ function getErrorMessage(error: SymfonyApiError): string {
 const { token } = useUser();
 
 const login = (username: string, password: string) =>
-    request<{ token: string }>("POST", "/api/login", null, { username, password });
+  request<{ token: string }>("POST", "/api/login", null, { username, password });
 
 const getAll = () =>
-  request<Array<{ uuid: string, title: string }>>("GET", "/api/examples", token.value, null);
+  request<Array<{ uuid: string; title: string }>>("GET", "/api/examples", token.value, null);
 
 export function useApi() {
   return {
     login,
-    getAll
+    getAll,
   };
 }

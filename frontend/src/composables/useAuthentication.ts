@@ -7,14 +7,14 @@ const { token, user } = useUser();
 async function login(username: string, password: string) {
   await useApi()
     .login(username, password)
-    .then(({ data, errors }) => {
-      if (errors !== undefined) {
-        console.log(errors);
+    .then((res) => {
+      if ("errors" in res) {
+        console.log(res.errors);
         return;
       }
 
-      token.value = data.token;
-      user.value = jwtDecode<DecodedToken>(data.token);
+      token.value = res.data.token;
+      user.value = jwtDecode<DecodedToken>(res.data.token);
 
       console.log(token.value);
       console.log(user.value);
