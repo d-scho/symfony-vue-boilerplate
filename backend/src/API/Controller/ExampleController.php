@@ -10,6 +10,7 @@ use OpenApi\Attributes\Tag;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
@@ -39,7 +40,7 @@ final class ExampleController extends AbstractController
         ),
     )]
     #[Route(name: 'example_index', methods: ['GET'], format: 'json')]
-    public function getAll(): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
         return new JsonResponse([]);
     }
@@ -51,6 +52,10 @@ final class ExampleController extends AbstractController
           ref: new Model(type: ExampleView::class),
           type: 'object',
         ),
+    )]
+    #[\OpenApi\Attributes\Response(
+        response: Response::HTTP_UNPROCESSABLE_ENTITY,
+        description: 'Unprocessable entity.',
     )]
     #[Route(name: 'example_create', methods: ['POST'], format: 'json')]
     public function create(

@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class AuthenticationTest extends WebTestCase
 {
+    public function test_example(): void
+    {
+        self::assertNotEmpty('123');
+    }
+
 //    public function test_missing_credentials(): void
 //    {
 //        $client = static::createClient();

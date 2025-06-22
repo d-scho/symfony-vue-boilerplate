@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationFailureHandler;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
 use SymfonyVueBoilerplateBackend\Authentication\Provider\UserProvider;
@@ -43,13 +45,12 @@ return static function (SecurityConfig $security) {
             ->checkPath('/api/login') // lexik JWT bundle covers that route
             ->usernamePath('username')
             ->passwordPath('password')
-            ->successHandler('lexik_jwt_authentication.handler.authentication_success')
-            ->failureHandler('lexik_jwt_authentication.handler.authentication_failure');
+            ->successHandler(AuthenticationSuccessHandler::class)
+            ->failureHandler(AuthenticationFailureHandler::class);
 
     // then 'api' for all other routes - pattern can be left out if "all"
     $security
         ->firewall('api')
-        ->provider('custom_user_provider')
         ->stateless(true)
         ->jwt();
 
@@ -58,8 +59,8 @@ return static function (SecurityConfig $security) {
     //     * i.e., it does not directly relate the firewall
     //     * e.g., if ->security(false) was not set on the 'dev' firewall, this would also cover it
     //     */
-        $security->accessControl()
-            ->path('^(?!api/login$)')
-            ->roles(['ROLE_USER'])
-        ;
+    $security->accessControl()
+        ->path('^(?!api/login$)')
+        ->roles(['ROLE_USER'])
+    ;
 };
