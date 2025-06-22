@@ -37,13 +37,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ],
     ]);
-//    if ($containerConfigurator->env() === 'test') {
-//        $containerConfigurator->extension('doctrine', [
-//            'dbal' => [
-//                'dbname_suffix' => '_test%env(default::TEST_TOKEN)%',
-//            ],
-//        ]);
-//    }
+    //    if ($containerConfigurator->env() === 'test') {
+    //        $containerConfigurator->extension('doctrine', [
+    //            'dbal' => [
+    //                'dbname_suffix' => '_test%env(default::TEST_TOKEN)%',
+    //            ],
+    //        ]);
+    //    }
     if ($containerConfigurator->env() === 'prod') {
         $containerConfigurator->extension('doctrine', [
             'orm' => [

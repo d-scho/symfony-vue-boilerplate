@@ -14,7 +14,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyVueBoilerplateBackend\Authentication\Repository\UserRepository;
 
-
 #[Entity(repositoryClass: UserRepository::class)]
 #[Table(name: 'user')]
 final class User implements UserInterface, PasswordAuthenticatedUserInterface

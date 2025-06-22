@@ -5,9 +5,6 @@ declare(strict_types=1);
 use PhpCsFixer\Config;
 
 return new Config()
-    ->setRules([
-        '@Symfony' => true,
-    ])
     ->setFinder(new PhpCsFixer\Finder()
         ->in(__DIR__)
         ->exclude('var')

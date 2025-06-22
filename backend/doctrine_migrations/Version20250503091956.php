@@ -9,10 +9,10 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20250503091956 extends AbstractMigration
 {
-
     public function up(Schema $schema): void
     {
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
             CREATE TABLE user (
                 uuid VARCHAR(36) NOT NULL,
                 username VARCHAR(64) NOT NULL,
@@ -29,7 +29,8 @@ final class Version20250503091956 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql(<<<SQL
+        $this->addSql(
+            <<<SQL
             DROP TABLE user
             SQL
         );

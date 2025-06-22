@@ -51,8 +51,8 @@ final class ExampleController extends AbstractController
         response: Response::HTTP_CREATED,
         description: 'Example created.',
         content: new JsonContent(
-          ref: new Model(type: ExampleView::class),
-          type: 'object',
+            ref: new Model(type: ExampleView::class),
+            type: 'object',
         ),
     )]
     #[\OpenApi\Attributes\Response(
