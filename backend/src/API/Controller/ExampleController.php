@@ -42,7 +42,9 @@ final class ExampleController extends AbstractController
     #[Route(name: 'example_index', methods: ['GET'], format: 'json')]
     public function getAll(Request $request): JsonResponse
     {
-        return new JsonResponse([]);
+        return new JsonResponse([
+            new ExampleView('00000000-0000-0000-0000-000000000001', 'Example title')
+        ]);
     }
 
     #[\OpenApi\Attributes\Response(
@@ -62,7 +64,7 @@ final class ExampleController extends AbstractController
         #[MapRequestPayload] ExampleCreationDTO $dto,
     ): JsonResponse {
         return new JsonResponse(new ExampleView(
-            Uuid::uuid4()->toString(),
+            Uuid::fromString('00000000-0000-0000-0000-000000000002')->toString(),
             $dto->title,
         ), Response::HTTP_CREATED);
     }

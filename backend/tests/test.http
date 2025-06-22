@@ -3,6 +3,15 @@ POST https://symfony-vue-boilerplate-backend.ddev.site/api/login
 Content-Type: application/json
 
 {
-  "username": "user",
-  "password": "user-pw"
+  "username": "admin",
+  "password": "admin-pw"
+}
+
+### Create example
+POST https://symfony-vue-boilerplate-backend.ddev.site/api/examples
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NTA1ODc0NDMsImV4cCI6MTc1MDU5MTA0Mywicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluIiwiZGlzcGxheU5hbWUiOiJBZG1pbmlzdHJhdG9yIn0.vBhwWlgL14yCPXFZt_F6YYYiMKGZQUcLlKIxuVycISfhi7IVei_EXh_T9QBtlmaJRvOL2xaKfp4mi6dzkzncc18llJNcmPRyFfmyMS3pBS6sZ21Rj9sIL5QWRO0O4oBSTdHUhOlcBVkGOYeEsX9-Hf481--Qa7wbRI8piQXS3aYPaPChoReEY96GRnEbG5TZOlL0Zmhr2tNy9swrpTBXzQ0PPF5Lf1-oEMLYdGJJ4SnCGEDURY6v3dwDW-h7IkZj5P0l1cbm-WMQTOxVh_B8UIlDxGIcUxM3fCN-VO44Vruf5Y_MaOxYQgqzmlwOSBg7DqDujaE6KsnUfObzdUMClg
+
+{
+  "title": "Example"
 }
